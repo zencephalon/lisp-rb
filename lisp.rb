@@ -6,11 +6,12 @@ end
 # Read an expression from an array of tokens
 def read_from_tokens(tokens)
   raise SyntaxError, 'unexpected EOF while reading' if tokens.size == 0
-  token = tokens.pop
+  token = tokens.shift
   if '(' == token
     sexp = []
-    sexp.concat(read_from_tokens(tokens)) while tokens.first != ')'
-    tokens.pop # remove the ')'
+    sexp.push(read_from_tokens(tokens)) while tokens.first != ')'
+    tokens.shift # remove the ')'
+    return sexp
   elsif ')' == token
     raise SyntaxError, 'unexpected )'
   else
