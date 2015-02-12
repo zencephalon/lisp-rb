@@ -34,3 +34,27 @@ end
 def parse(program)
   read_from_tokens tokenize program
 end
+
+def eval(exp, env = GLOBAL_ENV)
+  if exp.is_a?(Symbol)
+    env[exp]
+  elsif ! exp.is_a?(Array)
+    exp
+  else
+    fun, *exp = exp
+    if :quote == fun
+      exp
+    elsif :if == fun
+      test, conseq, alt = exp
+      exp = eval(test, env) ? conseq : alt
+      eval(exp, env)
+    elsif :define == fun
+      var, *exp = exp
+      env[var] = eval(exp, env)
+    else
+      proc = eval(fun, env)
+      args = exp.map {|arg| eval(arg, env)}
+      proc.call(*args)
+    end
+  end
+end
