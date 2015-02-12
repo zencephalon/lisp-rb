@@ -19,6 +19,18 @@ def read_from_tokens(tokens)
   end
 end
 
+def atom(token)
+  begin
+    return Integer(token)
+  rescue
+    begin
+      return Float(token)
+    rescue
+      return token #.to_sym
+    end
+  end
+end
+
 def parse(program)
   read_from_tokens tokenize program
 end
