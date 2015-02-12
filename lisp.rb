@@ -36,9 +36,11 @@ def parse(program)
 end
 
 def create_global_env
-  env = {
-    :+ => lambda {|*args| args.reduce(:+)}
-  }
+  env = {}
+  [:+, :*].each do |op|
+    env[op] = lambda {|*args| args.reduce(op)}
+  end
+  env
 end
 
 GLOBAL_ENV = create_global_env
