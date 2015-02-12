@@ -1,3 +1,3 @@
-def parse(str)
+def tokenize(str)
   str.gsub('(', ' ( ').gsub(')', ' ) ').split(' ')
 end
