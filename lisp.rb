@@ -35,9 +35,13 @@ def parse(program)
   read_from_tokens tokenize program
 end
 
-GLOBAL_ENV = {
-  :+ => lambda {|*args| args.reduce(:+)}
-}
+def create_global_env
+  env = {
+    :+ => lambda {|*args| args.reduce(:+)}
+  }
+end
+
+GLOBAL_ENV = create_global_env
 
 def eval(exp, env = GLOBAL_ENV)
   if exp.is_a?(Symbol)
