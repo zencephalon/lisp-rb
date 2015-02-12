@@ -1,3 +1,5 @@
 require_relative 'lisp'
 
-puts tokenize("(begin (define r 10) (* pi (* r r)))") == ['(', 'begin', '(', 'define', 'r', '10', ')', '(', '*', 'pi', '(', '*', 'r', 'r', ')', ')', ')']
+program = "(begin (define r 10) (* pi (* r r)))"
+puts tokenize(program) == ['(', 'begin', '(', 'define', 'r', '10', ')', '(', '*', 'pi', '(', '*', 'r', 'r', ')', ')', ')']
+puts parse(program) == ['begin', ['define', 'r', 10], ['*', 'pi', ['*', 'r', 'r']]]
