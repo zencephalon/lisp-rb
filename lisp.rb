@@ -18,3 +18,7 @@ def read_from_tokens(tokens)
     return atom(token)
   end
 end
+
+def parse(program)
+  read_from_tokens tokenize program
+end
