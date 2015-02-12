@@ -40,6 +40,9 @@ def create_global_env
   [:+, :*].each do |op|
     env[op] = lambda {|*args| args.reduce(op)}
   end
+  [:-, :/].each do |op|
+    env[op] = lambda {|a, b| a.send(op, b)}
+  end
   env
 end
 
