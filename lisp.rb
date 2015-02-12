@@ -26,7 +26,7 @@ def atom(token)
     begin
       return Float(token)
     rescue
-      return token #.to_sym
+      return token.to_sym
     end
   end
 end
