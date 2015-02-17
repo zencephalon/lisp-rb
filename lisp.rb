@@ -88,7 +88,11 @@ end
 
 def schemestr(exp)
   if exp.is_a?(Array)
-    '(' + exp.map {|x| schemestr(x)}.join(' ') + ')'
+    if exp.size == 1
+      exp.map {|x| schemestr(x)}.join(' ')
+    else
+      '(' + exp.map {|x| schemestr(x)}.join(' ') + ')'
+    end
   else
     exp.to_s
   end
