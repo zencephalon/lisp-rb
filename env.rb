@@ -7,6 +7,7 @@ class Env
     [:-, :/].each do |op|
       env[op] = lambda {|a, b| a.send(op, b)}
     end
+    env[:begin] = lambda {|*args| args[-1]}
     new(env, nil)
   end
 
