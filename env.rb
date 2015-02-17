@@ -18,11 +18,19 @@ class Env
     @hash[var]
   end
 
+  def []=(var, val)
+    @hash[var] = val
+  end
+
   def find(var)
     if @hash.include? var
       @hash
     else
       @parent.find(var) if @parent
     end
+  end
+
+  def child(params, args)
+    self.class.new(Hash[params.zip(args)], self)
   end
 end

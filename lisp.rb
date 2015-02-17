@@ -1,3 +1,5 @@
+require_relative 'env'
+
 # Convert a string into an array of tokens
 def tokenize(str)
   str.gsub('(', ' ( ').gsub(')', ' ) ').split(' ')
@@ -35,22 +37,15 @@ def parse(program)
   read_from_tokens tokenize program
 end
 
-def create_global_env
-  env = {}
-  [:+, :*].each do |op|
-    env[op] = lambda {|*args| args.reduce(op)}
-  end
-  [:-, :/].each do |op|
-    env[op] = lambda {|a, b| a.send(op, b)}
-  end
-  env
-end
-
-GLOBAL_ENV = create_global_env
+GLOBAL_ENV = Env.global
 
 def eval(exp, env = GLOBAL_ENV)
   if exp.is_a?(Symbol)
-    env[exp]
+    puts "looking for: #{exp}"
+    p env
+    val = env.find(exp)[exp]
+    puts "value: #{exp}, #{val}"
+    val
   elsif ! exp.is_a?(Array)
     exp
   else
@@ -62,12 +57,36 @@ def eval(exp, env = GLOBAL_ENV)
       exp = eval(test, env) ? conseq : alt
       eval(exp, env)
     elsif :define == fun
-      var, *exp = exp
+      p exp
+      var, exp = exp
       env[var] = eval(exp, env)
+    elsif :'set!' == fun
+      var, exp = exp
+      env.find(var)[var] = eval(exp, env)
+    elsif :lambda == fun
+      params, body = exp
+      proc = Procedure.new(params, body, env)
+      p proc
+      proc
     else
       proc = eval(fun, env)
+      p "Got to proc call"
+      p proc
       args = exp.map {|arg| eval(arg, env)}
       proc.call(*args)
     end
+  end
+end
+
+
+class Procedure
+  def initialize(params, body, env)
+    @params, @body, @env = params, body, env
+  end
+  def call(*args)
+    puts "PROC CALL =========="
+    p @params.zip(args)
+    p Hash[@params.zip(args)]
+    return eval(@body, @env.child(@params, args))
   end
 end
