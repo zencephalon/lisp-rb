@@ -41,11 +41,7 @@ GLOBAL_ENV = Env.global
 
 def eval(exp, env = GLOBAL_ENV)
   if exp.is_a?(Symbol)
-    puts "looking for: #{exp}"
-    p env
-    val = env.find(exp)[exp]
-    puts "value: #{exp}, #{val}"
-    val
+    env.find(exp)[exp]
   elsif ! exp.is_a?(Array)
     exp
   else
@@ -57,7 +53,6 @@ def eval(exp, env = GLOBAL_ENV)
       exp = eval(test, env) ? conseq : alt
       eval(exp, env)
     elsif :define == fun
-      p exp
       var, exp = exp
       env[var] = eval(exp, env)
     elsif :'set!' == fun
@@ -65,13 +60,9 @@ def eval(exp, env = GLOBAL_ENV)
       env.find(var)[var] = eval(exp, env)
     elsif :lambda == fun
       params, body = exp
-      proc = Procedure.new(params, body, env)
-      p proc
-      proc
+      Procedure.new(params, body, env)
     else
       proc = eval(fun, env)
-      p "Got to proc call"
-      p proc
       args = exp.map {|arg| eval(arg, env)}
       proc.call(*args)
     end
@@ -84,9 +75,6 @@ class Procedure
     @params, @body, @env = params, body, env
   end
   def call(*args)
-    puts "PROC CALL =========="
-    p @params.zip(args)
-    p Hash[@params.zip(args)]
-    return eval(@body, @env.child(@params, args))
+    eval(@body, @env.child(@params, args))
   end
 end
