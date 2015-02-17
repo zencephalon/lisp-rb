@@ -69,7 +69,6 @@ def eval(exp, env = GLOBAL_ENV)
   end
 end
 
-
 class Procedure
   def initialize(params, body, env)
     @params, @body, @env = params, body, env
@@ -78,3 +77,21 @@ class Procedure
     eval(@body, @env.child(@params, args))
   end
 end
+
+def repl(prompt='risp > ')
+  loop do
+    print prompt
+    val = eval parse gets
+    puts schemestr val if !val.nil?
+  end
+end
+
+def schemestr(exp)
+  if exp.is_a?(Array)
+    '(' + exp.map {|x| schemestr(x)}.join(' ') + ')'
+  else
+    exp.to_s
+  end
+end
+
+repl
