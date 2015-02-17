@@ -7,6 +7,9 @@ class Env
     [:-, :/].each do |op|
       env[op] = lambda {|a, b| a.send(op, b)}
     end
+    Math.methods(false).each do |sym|
+      env[sym] = lambda {|*args| Math.send(sym, *args)}
+    end
     env[:begin] = lambda {|*args| args[-1]}
     new(env, nil)
   end
