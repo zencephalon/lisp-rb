@@ -8,3 +8,6 @@ puts eval(parse("(+ 3 5 8)")) == 16
 puts eval(parse("(* 3 5 8)")) == 120
 puts eval(parse("(- 3 5)")) == -2
 puts eval(parse("(/ 6 2)")) == 3
+eval(parse("(define pi 3.14)"))
+eval(parse("(define circle-area (lambda (r) (* pi (* r r))))"))
+puts eval(parse("(circle-area 10)")) == 314
