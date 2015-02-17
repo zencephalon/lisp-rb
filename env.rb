@@ -4,7 +4,7 @@ class Env
     [:+, :*].each do |op|
       env[op] = lambda {|*args| args.reduce(op)}
     end
-    [:-, :/].each do |op|
+    [:-, :/, :>, :<, :<=, :>=].each do |op|
       env[op] = lambda {|a, b| a.send(op, b)}
     end
     Math.methods(false).each do |sym|
