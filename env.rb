@@ -1,6 +1,10 @@
 class Env
   def self.global
-    env = {}
+    env = {
+      abs: lambda {|n| n.abs},
+      begin: lambda {|*args| args[-1]},
+      cons: lambda {|a, b| [a] + b}
+    }
     [:+, :*].each do |op|
       env[op] = lambda {|*args| args.reduce(op)}
     end
@@ -10,8 +14,6 @@ class Env
     Math.methods(false).each do |sym|
       env[sym] = lambda {|*args| Math.send(sym, *args)}
     end
-    env[:abs] = lambda {|n| n.abs}
-    env[:begin] = lambda {|*args| args[-1]}
     new(env, nil)
   end
 
