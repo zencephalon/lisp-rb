@@ -11,3 +11,6 @@ puts eval(parse("(/ 6 2)")) == 3
 eval(parse("(define pi 3.14)"))
 eval(parse("(define circle-area (lambda (r) (* pi (* r r))))"))
 puts eval(parse("(circle-area 10)")) == 314
+eval parse "(define make-account (lambda (balance) (lambda (amt) (begin (set! balance (+ balance amt)) balance))))"
+eval parse "(define account1 (make-account 100))"
+puts 120 == eval(parse "(account1 20)")
